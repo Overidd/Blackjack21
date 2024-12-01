@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="shortcut icon" href="./assets/Icon.png" type="image/x-icon">
+   <link rel="stylesheet" href="./css/styles.css">
+   <title>BlackJack21</title>
+</head>
+
+<body>
+
+   <header>
+      <h1>
+         Blackjack 21
+      </h1>
+   </header>
+
+   <main>
+      <div class="container_deck_machine">
+         <section id="card_deck">
+            <small id="deck_count_cards">0</small>
+            <figure>
+               <img src="./assets/cartas/red_back.png" alt="Icon" class="card">
+            </figure>
+         </section>
+
+         <section id="card_machine">
+            <small id="machine_points">0</small>
+            <figure>
+               <img src="./assets/cartas/2D.png" alt="" class="card">
+               <img src="./assets/cartas/red_back.png" alt="Icon" class="card">
+            </figure>
+         </section>
+      </div>
+
+      <section id="card_player">
+         <small id="player_points">0</small>
+         <figure>
+            <img src="./assets/cartas/4S.png" alt="" class="card">
+            <img src="./assets/cartas/3H.png" alt="" class="card">
+            <img src="./assets/cartas/5S.png" alt="" class="card">
+         </figure>
+      </section>
+
+      <div class="container_buttons">
+         <section class="btns_play">
+            <h3>Tu decisión</h3>
+
+            <div>
+               <button id="btn_take">+</button>
+               <label>Pedir carta</label>
+            </div>
+
+            <div>
+               <button id="btn_stop">■</button>
+               <label>Detener</label>
+            </div>
+         </section>
+
+         <section class="btn_new">
+            <button id="btn_new">Nuevo juego</button>
+         </section>
+
+         <section class="btns_rules">
+            <h3>Decide si vale 11 o 1</h3>
+            <button id="btn_rules">11</button>
+            <button id="btn_rules">1</button>
+         </section>
+
+      </div>
+   </main>
+
+</body>
+
+</html>

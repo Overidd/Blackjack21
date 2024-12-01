@@ -1,0 +1,219 @@
+*,
+*::after,
+*::before {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   background-color: #2f4f30;
+   min-height: 100dvb;
+}
+
+h1 {
+   font-family: monospace;
+   text-decoration: dashed underline;
+   color: #fff;
+   text-align: center;
+   padding: 2rem;
+}
+
+img {
+   max-width: 100%;
+   height: auto;
+}
+
+main {
+   margin: 0 auto;
+   width: 90%;
+   max-width: 79%;
+   display: grid;
+   grid-template-columns: 1fr;
+   place-items: center;
+   gap: 2rem 0;
+}
+
+small {
+   font-family: monospace;
+   background-color: #123;
+   color: #fff;
+   display: block;
+   width: fit-content;
+   text-align: center;
+   font-size: 1rem;
+   border-radius: 0.5rem;
+
+   margin: 0 auto;
+   margin-bottom: 0.3rem;
+   padding: 0.5rem;
+}
+
+.card {
+   width: 7rem;
+}
+
+.container_deck_machine {
+   width: 100%;
+   display: flex;
+   position: relative;
+}
+
+#card_deck {
+   position: absolute;
+}
+
+#card_deck img {
+   border-radius: 10px;
+   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3),
+      2px 6px 12px rgba(0, 0, 0, 0.2),
+      inset 1px 1px 4px rgba(255, 255, 255, 0.6);
+}
+
+#card_machine {
+   margin: 0 auto;
+}
+
+#card_player {
+   .card {
+      position: relative;
+      left: 2rem;
+      cursor: alias;
+      transition: all 0.5s;
+      animation: moveCardPlayer 1s linear;
+   }
+
+   .card+.card {
+      margin-left: -10%;
+   }
+
+   .card:hover {
+      transform: rotate(-10deg);
+      translate: -1.2rem;
+      z-index: 1;
+   }
+
+   .card:last-child:hover {
+      translate: 0.2rem;
+      transform: rotate(4deg);
+   }
+}
+
+/** Animation de las card para el jugador */
+@keyframes moveCardPlayer {
+   0% {
+      transform: translate(-20rem, -10rem) rotate(-25deg);
+      opacity: 0;
+   }
+
+   20% {
+      opacity: 1;
+   }
+
+   100% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+   }
+}
+
+#card_player .card {
+   opacity: 0;
+   animation: moveCardPlayer 1s ease-out;
+   animation-fill-mode: forwards;
+}
+
+#card_player .card:nth-child(1) {
+   animation-delay: 0.5s;
+}
+
+#card_player .card:nth-child(2) {
+   animation-delay: 1s;
+}
+
+#card_player .card:nth-child(3) {
+   animation-delay: 1.5s;
+}
+
+/** Animation de las card para la maquina */
+@keyframes moveCardMachine {
+   0% {
+      transform: translate(-20rem, 0rem) rotate(-25deg);
+      opacity: 0;
+   }
+
+   20% {
+      opacity: 1;
+   }
+
+   100% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+   }
+}
+
+#card_machine .card {
+   opacity: 0;
+   animation: moveCardMachine 1s ease-out;
+   animation-fill-mode: forwards;
+}
+
+#card_machine .card:nth-child(1) {
+   animation-delay: 2s;
+}
+
+#card_machine .card:nth-child(2) {
+   animation-delay: 2.5s;
+}
+
+/** STYLOS DE BOTONES */
+.btn_new{
+   display: none;
+}
+.btns_rules{
+   display: none;
+}
+
+
+/** MEDIA QUERYS */
+@media screen and (max-width: 768px) {
+   .card {
+      width: 5rem;
+   }
+
+   #card_machine {
+      margin: 0;
+      margin-left: auto;
+   }
+
+   @keyframes moveCardPlayer {
+      0% {
+         transform: translate(-7rem, -10rem) rotate(-25deg);
+         opacity: 0;
+      }
+   
+      50% {
+         opacity: 1;
+      }
+   
+      100% {
+         transform: translate(0, 0) rotate(0deg);
+         opacity: 1;
+      }
+   }
+
+   @keyframes moveCardMachine {
+      0% {
+         transform: translate(-10rem, 0rem) rotate(-25deg);
+         opacity: 0;
+      }
+   
+      50% {
+         opacity: 1;
+      }
+   
+      100% {
+         transform: translate(0, 0) rotate(0deg);
+         opacity: 1;
+      }
+   }
+}
