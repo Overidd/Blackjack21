@@ -6,17 +6,23 @@
    box-sizing: border-box;
 }
 
+* {
+   --width-card: clamp(3.5rem, 7.5vw, 8rem);
+}
+
 body {
+   font-family: monospace;
    background-color: #2f4f30;
-   min-height: 100dvb;
+   color: #fff;
+   height: 100dvb;
+   overflow: hidden;
 }
 
 h1 {
-   font-family: monospace;
-   text-decoration: dashed underline;
-   color: #fff;
+   /* text-decoration: dashed underline; */
    text-align: center;
-   padding: 2rem;
+   font-size: clamp(1rem, 5vw, 1.5rem);
+   padding: 1rem;
 }
 
 img {
@@ -31,17 +37,16 @@ main {
    display: grid;
    grid-template-columns: 1fr;
    place-items: center;
-   gap: 2rem 0;
+   gap: 10rem 0;
+   position: relative;
 }
 
 small {
-   font-family: monospace;
    background-color: #123;
-   color: #fff;
    display: block;
    width: fit-content;
    text-align: center;
-   font-size: 1rem;
+   font-size: clamp(0.7rem, 2vw, 1rem);
    border-radius: 0.5rem;
 
    margin: 0 auto;
@@ -50,7 +55,7 @@ small {
 }
 
 .card {
-   width: 7rem;
+   width: var(--width-card);
 }
 
 .container_deck_machine {
@@ -59,28 +64,32 @@ small {
    position: relative;
 }
 
-#card_deck {
+.container_deck_machine,
+.content_machine,
+.container_player {
+   height: clamp(12rem, 15vw, 15rem);
+}
+
+.container_card_deck {
    position: absolute;
 }
 
-#card_deck img {
+.container_card_deck img {
    border-radius: 10px;
    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3),
       2px 6px 12px rgba(0, 0, 0, 0.2),
       inset 1px 1px 4px rgba(255, 255, 255, 0.6);
 }
 
-#card_machine {
+.content_machine {
    margin: 0 auto;
 }
 
-#card_player {
+.container_player {
    .card {
       position: relative;
       left: 2rem;
-      cursor: alias;
-      transition: all 0.5s;
-      animation: moveCardPlayer 1s linear;
+      transition: all 0.5s ease-in-out;
    }
 
    .card+.card {
@@ -88,21 +97,21 @@ small {
    }
 
    .card:hover {
-      transform: rotate(-10deg);
-      translate: -1.2rem;
       z-index: 1;
+      translate: -1rem;
+      rotate: -5deg;
    }
 
    .card:last-child:hover {
       translate: 0.2rem;
-      transform: rotate(4deg);
+      rotate: 4deg;
    }
 }
 
 /** Animation de las card para el jugador */
 @keyframes moveCardPlayer {
    0% {
-      transform: translate(-20rem, -10rem) rotate(-25deg);
+      transform: translate(-20rem, -20rem) rotate(-25deg);
       opacity: 0;
    }
 
@@ -116,23 +125,20 @@ small {
    }
 }
 
-#card_player .card {
+.container_player .card {
    opacity: 0;
    animation: moveCardPlayer 1s ease-out;
    animation-fill-mode: forwards;
 }
 
-#card_player .card:nth-child(1) {
+.container_player .card:nth-child(1) {
    animation-delay: 0.5s;
 }
 
-#card_player .card:nth-child(2) {
+.container_player .card:nth-child(2) {
    animation-delay: 1s;
 }
 
-#card_player .card:nth-child(3) {
-   animation-delay: 1.5s;
-}
 
 /** Animation de las card para la maquina */
 @keyframes moveCardMachine {
@@ -151,26 +157,144 @@ small {
    }
 }
 
-#card_machine .card {
+.content_machine .card {
    opacity: 0;
    animation: moveCardMachine 1s ease-out;
    animation-fill-mode: forwards;
 }
 
-#card_machine .card:nth-child(1) {
+.content_machine .card:nth-child(1) {
    animation-delay: 2s;
 }
 
-#card_machine .card:nth-child(2) {
+.content_machine .card:nth-child(2) {
    animation-delay: 2.5s;
 }
 
 /** STYLOS DE BOTONES */
-.btn_new{
-   display: none;
+@keyframes animationBtn_new {
+   0% {
+      border-color: transparent;
+   }
+
+   25% {
+      border-color: #78ce7b;
+   }
+
+   50% {
+      border-color: transparent;
+
+   }
+
+   75% {
+      border-color: #78ce7b;
+   }
+
+   100% {
+      border-color: transparent;
+   }
 }
-.btns_rules{
+
+.container_actions {
+   display: block;
+
+   border-top: 1px solid #fffa;
+   border-bottom: 1px solid #fffa;
+   background-color: #0009;
+   position: fixed;
+   backdrop-filter: blur(2px);
+   width: 100%;
+   z-index: 10;
+   padding: 0.5rem;
+}
+
+.container_actions h3 {
+   min-width: 100%;
+   font-size: 1.1rem;
+}
+
+.container_actions label {
+   display: block;
+   font-size: 0.8rem;
+   font-weight: bold;
+   opacity: 0.7;
+   margin-top: 0.1rem;
+}
+
+.container_actions button {
+   opacity: 0.9;
+   background-color: #0003;
+   width: 3rem;
+   height: 3rem;
+   font-size: 1.2rem;
+   border: none;
+   border-radius: 50%;
+   border-style: solid;
+   border-width: 2px;
+}
+
+.container_actions .btn-continue:hover~label {
+   opacity: 1;
+}
+
+.container_actions .btn-continue:hover {
+   opacity: 1;
+}
+
+.container_state,
+.container_rules,
+.container_btn_player {
    display: none;
+   justify-content: center;
+   flex-wrap: wrap;
+   text-align: center;
+   gap: 1.5rem;
+}
+
+.container_btn_player div {
+   width: 6rem;
+}
+
+#btn_take {
+   color: #78ce7b;
+   /* border-color: #78ce7b; */
+}
+
+#btn_stop {
+   width: 2.5rem;
+   height: 2.5rem;
+   color: #dd5a5a;
+   /* border-color: #dd5a5a; */
+}
+
+.btn_new {
+   width: 2.5rem;
+   height: 2.5rem;
+   color: #db691e;
+}
+
+.container_rules {
+   .btn_rule {
+      color: tomato;
+      cursor: pointer;
+   }
+}
+
+.btn_active {
+   display: block;
+}
+
+.btn-continue {
+   cursor: pointer;
+}
+
+.btn-disabled {
+   cursor: not-allowed;
+   opacity: 0.5;
+}
+
+.active_flex {
+   display: flex;
 }
 
 
@@ -180,21 +304,21 @@ small {
       width: 5rem;
    }
 
-   #card_machine {
+   .content_machine {
       margin: 0;
       margin-left: auto;
    }
 
    @keyframes moveCardPlayer {
       0% {
-         transform: translate(-7rem, -10rem) rotate(-25deg);
+         transform: translate(-5rem, -20rem) rotate(-25deg);
          opacity: 0;
       }
-   
+
       50% {
          opacity: 1;
       }
-   
+
       100% {
          transform: translate(0, 0) rotate(0deg);
          opacity: 1;
@@ -206,11 +330,11 @@ small {
          transform: translate(-10rem, 0rem) rotate(-25deg);
          opacity: 0;
       }
-   
+
       50% {
          opacity: 1;
       }
-   
+
       100% {
          transform: translate(0, 0) rotate(0deg);
          opacity: 1;

@@ -6,6 +6,8 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="shortcut icon" href="./assets/Icon.png" type="image/x-icon">
    <link rel="stylesheet" href="./css/styles.css">
+   <script src="js/underscore.js" defer></script>
+   <script src="js/app.js" defer></script>
    <title>BlackJack21</title>
 </head>
 
@@ -19,56 +21,62 @@
 
    <main>
       <div class="container_deck_machine">
-         <section id="card_deck">
+         <section class="container_card_deck">
             <small id="deck_count_cards">0</small>
             <figure>
                <img src="./assets/cartas/red_back.png" alt="Icon" class="card">
             </figure>
          </section>
 
-         <section id="card_machine">
+         <section class="content_machine">
             <small id="machine_points">0</small>
-            <figure>
+            <figure id="card_machine">
                <img src="./assets/cartas/2D.png" alt="" class="card">
                <img src="./assets/cartas/red_back.png" alt="Icon" class="card">
             </figure>
          </section>
       </div>
 
-      <section id="card_player">
+      <section class="container_player">
          <small id="player_points">0</small>
-         <figure>
+         <figure id="card_player">
             <img src="./assets/cartas/4S.png" alt="" class="card">
             <img src="./assets/cartas/3H.png" alt="" class="card">
             <img src="./assets/cartas/5S.png" alt="" class="card">
          </figure>
       </section>
 
-      <div class="container_buttons">
-         <section class="btns_play">
+      <div class="container_actions">
+         <section class="container_btn_player active_flex">
             <h3>Tu decisión</h3>
-
             <div>
-               <button id="btn_take">+</button>
+               <button id="btn_new" class="btn_new btn-continue">+</button>
+               <label for="btn_new">Nueva partida</label>
+            </div>
+            <div>
+               <button id="btn_take" class="btn-continue">+</button>
                <label>Pedir carta</label>
             </div>
 
             <div>
-               <button id="btn_stop">■</button>
-               <label>Detener</label>
+               <button id="btn_stop" class="btn-continue">■</button>
+               <label>Plantarse</label>
             </div>
          </section>
 
-         <section class="btn_new">
-            <button id="btn_new">Nuevo juego</button>
+         <section class="container_rules">
+            <h3>Decide si vale 1 o 11</h3>
+            <button class="btn_rule" value="1">1</button>
+            <button class="btn_rule" value="11">11</button>
          </section>
 
-         <section class="btns_rules">
-            <h3>Decide si vale 11 o 1</h3>
-            <button id="btn_rules">11</button>
-            <button id="btn_rules">1</button>
+         <section class="container_state">
+            <h3>Perdiste</h3>
+            <div>
+               <button id="btn_new_state" class="btn_new btn-continue">+</button>
+               <label>Nueva partida</label>
+            </div>
          </section>
-
       </div>
    </main>
 
