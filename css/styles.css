@@ -85,14 +85,15 @@ small {
    margin: 0 auto;
 }
 
-.container_player {
+.container_player,
+.content_machine {
    .card {
       position: relative;
       left: 2rem;
       transition: all 0.5s ease-in-out;
    }
 
-   .card+.card {
+   .card {
       margin-left: -10%;
    }
 
@@ -307,6 +308,11 @@ small {
    .content_machine {
       margin: 0;
       margin-left: auto;
+   }
+
+   .container_player,
+   .content_machine {
+      width: 12rem;
    }
 
    @keyframes moveCardPlayer {

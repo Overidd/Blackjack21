@@ -1,5 +1,3 @@
-
-
 const btn_new = document.getElementById('btn_new');
 const btn_new_state = document.getElementById('btn_new_state');
 const btn_take = document.getElementById('btn_take');
@@ -19,12 +17,45 @@ const container_state = document.querySelector('.container_state');
 const container_rules = document.querySelector('.container_rules');
 const btn_rules = document.querySelectorAll('.btn_rule') || [];
 
+const handleBtnContinue = (continue_ = true) => {
+   [btn_take, btn_stop].forEach(btn => {
+      btn.disabled = !continue_;
+      btn.classList.toggle('btn-disabled', !continue_);
+      btn.classList.toggle('btn-continue', continue_);
+   });
+};
+
+const layoutStates = {
+   lose: 'Perdiste',
+   win: 'Ganaste',
+   draw: 'Empate',
+};
+
+const handleLayout = (state = '') => {
+   container_btn_actions.classList.toggle('active_flex', !state);
+   container_rules.classList.toggle('active_flex', state === 'rules');
+   container_state.classList.toggle('active_flex', !!layoutStates[state]);
+
+   if (layoutStates[state]) {
+      container_state.children[0].innerText = layoutStates[state];
+   }
+};
+
 // Un array de cartas;
 let deck = [];
 let deck_machine = [];
 let deck_player = [];
 let playerPoints = 0;
 let machinePoints = 0;
+
+const updatePlayerPoints = (points) => {
+   playerPoints += points;
+   player_points.innerText = playerPoints; // Actualiza el DOM
+};
+const updateMachinePoints = (points) => {
+   machinePoints += points;
+   machine_points.innerText = machinePoints; // Actualiza el DOM
+};
 
 // Crear mazo y barajar
 const createDeck = () => {
@@ -45,124 +76,86 @@ const getCard = (type_deck) => {
    type_deck.push(card);
    return card;
 };
+
 // Manejar lógica para el As del jugador
 const handleAceForPlayer = async () => {
    handleLayout('rules');
-   const newpoint = await new Promise(resolve => {
+   return await new Promise(resolve => {
       btn_rules.forEach(btn => {
          btn.onclick = () => {
-            resolve(btn.textContent === '1' ? 1 : 11)
+            handleLayout('');
+            resolve(btn.textContent === '1' ? 1 : 11);
          };
       });
    });
-   handleLayout('');
-   return newpoint
 };
+
 
 // Obtener valor de la carta
-const getValueCard = async (card, isMachine = false) => {
+const getValueCard = (card) => {
    const value = card.slice(0, -1);
-   const point = isNaN(value) ? (value === 'A' ? 11 : 10) : parseInt(value);
-
-   if (isMachine) {
-      return (point === 11 && machinePoints > 10) ? 1 : point;
-   }
-
-   if (point === 11) {
-      return await handleAceForPlayer();
-   }
-   return point;
+   return isNaN(value) ? (value === 'A' ? 11 : 10) : parseInt(value);
 };
 
+const updatePounts = async (point, type = '') => {
 
-const createElementCard = (card) => {
+   if (type === 'machine') {
+      updateMachinePoints((point === 11 && machinePoints > 10) ? 1 : point);
+      return point
+   }
+   if (point === 11) {
+      const aceValue = await handleAceForPlayer();
+      updatePlayerPoints(aceValue)
+      return aceValue
+
+   } else {
+      updatePlayerPoints(point);
+      return point
+   }
+}
+
+const createElementCard = (card, isMachine = false, i = 0) => {
    const img = document.createElement('img');
    img.classList.add('card');
-   img.src = `./assets/cartas/${card}.png`;
+
+   if (isMachine) {
+      // img.style.marginLeft = `-${deck_machine.length * 5}%`;
+      i === 0 ? img.src = `./assets/cartas/${card}.png` : img.src = `./assets/cartas/red_back.png`
+   } else {
+      // img.style.marginLeft = `-${deck_player.length * 5}%`;
+      img.src = `./assets/cartas/${card}.png`;
+   }
+
    return img
 }
 
 const setCardElementInitial = async (elementPatter, type_deck = [], isMachine = false) => {
-   let points = 0;
+   const promises = [];
    for (let i = 0; i < 2; i++) {
-      const img = document.createElement('img');
-      img.classList.add('card');
-
       const card = getCard(type_deck);
+      const img = createElementCard(card, isMachine, i);
+      elementPatter.append(img);
 
-      if (isMachine) {
-         i === 0
-            ? (img.src = `./assets/cartas/${card}.png`, points += await getValueCard(card, isMachine))
-            : img.src = `./assets/cartas/red_back.png`;
-         elementPatter.append(img);
-      } else {
-         img.src = `./assets/cartas/${card}.png`;
-         elementPatter.append(img);
-         points += await getValueCard(card, isMachine);
+      if (isMachine && i === 0) {
+         const point = getValueCard(card)
+         updatePounts(point, 'machine');
+
+      } else if (!isMachine) {
+         const point = getValueCard(card)
+         promises.push(updatePounts(point, 'player'));
       }
    }
-   return points
+   await Promise.all(promises);
 }
 
 const initialMachine = async () => {
    card_machine.innerHTML = '';
-   machinePoints = await setCardElementInitial(card_machine, deck_machine, true);
-   machine_points.innerText = machinePoints;
+   setCardElementInitial(card_machine, deck_machine, true);
 }
 
 const initialPlayer = async () => {
    card_player.innerHTML = '';
-   playerPoints = await setCardElementInitial(card_player, deck_player, false);
-   player_points.innerText = playerPoints;
-}
-
-const handleBtnContinue = (continue_ = true) => {
-   btn_take.disabled = !continue_;
-   btn_stop.disabled = !continue_;
-
-   if (continue_) {
-      btn_take.classList.remove('btn-disabled');
-      btn_stop.classList.remove('btn-disabled');
-      btn_take.classList.add('btn-continue');
-      btn_stop.classList.add('btn-continue');
-   } else {
-      btn_take.classList.remove('btn-continue');
-      btn_stop.classList.remove('btn-continue');
-      btn_take.classList.add('btn-disabled');
-      btn_stop.classList.add('btn-disabled');
-   }
-}
-
-const handleLayout = (name = '') => {
-   if (name === 'lose') {
-      container_rules.classList.remove('active_flex');
-      container_btn_actions.classList.remove('active_flex');
-      container_state.classList.add('active_flex');
-      container_state.children[0].innerText = 'Perdiste';
-
-   } else if (name === 'win') {
-      container_rules.classList.remove('active_flex');
-      container_btn_actions.classList.remove('active_flex');
-      container_state.classList.add('active_flex');
-      container_state.children[0].innerText = 'Ganaste';
-
-   } else if (name === 'draw') {
-      container_rules.classList.remove('active_flex');
-      container_btn_actions.classList.remove('active_flex');
-      container_state.classList.add('active_flex');
-      container_state.children[0].innerText = 'Empate';
-
-   } else if (name === 'rules') {
-      container_btn_actions.classList.remove('active_flex');
-      container_state.classList.remove('active_flex');
-      container_rules.classList.add('active_flex');
-
-   } else {
-      container_rules.classList.remove('active_flex');
-      container_state.classList.remove('active_flex');
-      container_btn_actions.classList.add('active_flex');
-   }
-
+   setCardElementInitial(card_player, deck_player, false);
 }
 
 const initialGame = () => {
@@ -175,17 +168,17 @@ const initialGame = () => {
    createDeck();
    initialMachine();
    initialPlayer();
-   deck_count_cards.innerText = deck.length;
-
    handleBtnContinue(true);
+   deck_count_cards.innerText = deck.length;
 }
 
 const handleplayer = () => {
    const card = getCard(deck_player);
    card_player.append(createElementCard(card));
-   getValueCard(card);
+   updatePounts(getValueCard(card), 'player');
    player_points.innerText = playerPoints;
    player_points.style.animationDelay = "0.5s";
+   deck_count_cards.innerText = deck.length;
 
    if (playerPoints > 21) {
       handleBtnContinue(false);
@@ -197,18 +190,16 @@ const handleplayer = () => {
    }
 }
 
-const handleMachine = () => {
+const handleMachine = async () => {
    const cards = document.querySelectorAll('#card_machine .card') || [];
    cards[1].src = `./assets/cartas/${deck_machine.at(-1)}.png`;
-   getValueCard(deck_machine.at(-1));
-   machine_points.innerText = machinePoints;
+   updatePounts(getValueCard(deck_machine.at(-1)), 'machine');
 
-   const playMachineTurn = () => {
+   const playMachineTurn = async () => {
       if (machinePoints < 17) {
          const card = getCard(deck_machine);
          card_machine.append(createElementCard(card));
-         getValueCard(card);
-         machine_points.innerText = machinePoints;
+         updatePounts(getValueCard(card), 'machine');
 
          setTimeout(playMachineTurn, 1000);
       } else {
@@ -231,7 +222,6 @@ btn_new_state.onclick = () => initialGame()
 
 btn_take.onclick = () => {
    handleplayer();
-   deck_count_cards.innerText = deck.length;
 }
 
 btn_stop.onclick = () => {
@@ -239,11 +229,6 @@ btn_stop.onclick = () => {
    handleMachine();
 }
 
-
 (() => {
    initialGame();
 })()
-
-
-
-
