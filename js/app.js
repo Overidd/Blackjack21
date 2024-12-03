@@ -60,8 +60,8 @@ const updateMachinePoints = (points) => {
 // Crear mazo y barajar
 const createDeck = () => {
    const types = ['C', 'D', 'H', 'S'];
-   // const specials = ['A', 'J', 'Q', 'K'];
-   const specials = ['A', 'A', 'A', 'A'];
+   const specials = ['A', 'J', 'Q', 'K'];
+   // const specials = ['A', 'A', 'A', 'A'];
 
    for (let i = 2; i <= 10; i++) {
       types.forEach(type => deck.push(`${i}${type}`));
